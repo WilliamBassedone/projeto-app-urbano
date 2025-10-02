@@ -1,0 +1,24 @@
+{
+  "name": "modules/groups",
+  "description": "Groups module",
+  "autoload": {
+    "psr-4": {
+      "Modules\\Groups\\": "app/",
+      "Modules\\Groups\\Database\\Factories\\": "database/factories/",
+      "Modules\\Groups\\Database\\Seeders\\": "database/seeders/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Modules\\Groups\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Modules\\Groups\\Providers\\GroupsServiceProvider"
+      ],
+      "aliases": { }
+    }
+  }
+}
