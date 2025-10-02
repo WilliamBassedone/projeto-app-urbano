@@ -24,6 +24,16 @@ class Group extends Model
         'can_upload'
     ];
 
+    protected $casts = [
+        'can_view'     => 'boolean',
+        'can_create'   => 'boolean',
+        'can_edit'     => 'boolean',
+        'can_delete'   => 'boolean',
+        'can_toggle'   => 'boolean',
+        'can_download' => 'boolean',
+        'can_upload'   => 'boolean',
+    ];
+
     // protected static function newFactory(): GroupFactory
     // {
     //     // return GroupFactory::new();
