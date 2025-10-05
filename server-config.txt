@@ -1,3 +1,5 @@
+Hostinger + ClouPanel - Laravel
+
 1. Criar chave SSH:
 
     ssh-keygen -t rsa -b 4096 -C "williambassedone@outlook.com"
@@ -20,4 +22,65 @@
         Digite a senha
         E terá acesso
 
-5. cd /home/user/htdocs/srv831241.hstgr.cloud
+        cd /home/user/htdocs/srv831241.hstgr.cloud
+
+6. Conexão SSH com Github
+
+    Conectado via terminal ao servidor
+
+    ssh-keygen -t rsa -b 4096 -C "williambassedone@outlook.com"
+    cat ~/.ssh/id_rsa.pub
+
+    Depois de gerada vai em https://github.com/settings/keys em new SSH Key e adicione a chave
+
+    ssh -T git@github.com
+    yes
+    Senha
+
+7. Remover arquivos do servidor:
+
+    rm -rf /home/user/htdocs/srv831241.hstgr.cloud/{*,.*}
+
+8. Clone do projeto do github
+
+    git clone https://github.com/WilliamBassedone/projeto-app-urbano .
+    ls -la
+    em APP_ENV coloque em production, local só para testes
+
+9. Configurações do projeto no servidor
+
+    Criar banco de dados em https://168.231.99.148:8443/site/srv831241.hstgr.cloud/databases
+    
+    Terminal:
+
+        Configurar .env do servidor
+            cp .env.example .env
+            nano .env
+        
+        composer install
+        php artisan migrate
+
+    
+10. Instalar Node.js no servidor
+
+    sudo apt update
+    curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+    sudo apt install -y nodejs
+    sudo systemctl restart nginx
+    php artisan config:clear
+    npm install
+    npm run build
+    sudo systemctl restart nginx
+    php artisan config:clear
+
+11. Gerar chave para o arquivo .env
+
+    php artisan key:generate
+
+12. Alterar a propriedade do diretório
+
+    sudo chown -R user:user /home/user/htdocs/srv831241.hstgr.cloud
+
+Agora ao acessar vai ver o projeto
+
+    https://srv831241.hstgr.cloud/
