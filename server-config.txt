@@ -84,3 +84,10 @@ Hostinger + ClouPanel - Laravel
 Agora ao acessar vai ver o projeto
 
     https://srv831241.hstgr.cloud/
+
+
+-----------------------------------------------
+
+1. Configuração de dominio
+
+    https://hpanel.hostinger.com/vps/831241/dns-manager
