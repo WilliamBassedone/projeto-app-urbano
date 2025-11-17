@@ -1,3 +1,4 @@
 {
-    "Groups": true
+    "Groups": true,
+    "Authentication": true
 }

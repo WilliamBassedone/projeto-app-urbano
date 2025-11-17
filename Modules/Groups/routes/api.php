@@ -12,3 +12,4 @@ Route::prefix('v1/groups')->group(function () {
     Route::patch('/{group}', [GroupController::class, 'update']);
     Route::delete('/{group}', [GroupController::class, 'destroy']);
 });
+
