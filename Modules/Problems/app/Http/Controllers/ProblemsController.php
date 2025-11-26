@@ -45,19 +45,52 @@ class ProblemsController extends Controller
             'id_categorie' => 'required|exists:problems_categories,id',
             'geolocation' => 'nullable|string',
             'photos' => 'nullable|array',
-            'photos.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // 'photos.*' validation removed to allow mixed types (File or Base64 string)
         ]);
 
         $validated['ip'] = $request->ip();
 
         $problem = Problem::create($validated);
 
-        if ($request->hasFile('photos')) {
-            foreach ($request->file('photos') as $photo) {
-                $path = $photo->store('problems', 'public');
-                $problem->photos()->create([
-                    'archive' => $path,
-                ]);
+        if ($request->has('photos')) {
+            foreach ($request->photos as $photo) {
+                $path = null;
+
+                // Case 1: Base64 String
+                if (is_string($photo)) {
+                    // Check if it's a valid Base64 image string
+                    if (preg_match('/^data:image\/(\w+);base64,/', $photo, $type)) {
+                        $data = substr($photo, strpos($photo, ',') + 1);
+                        $type = strtolower($type[1]); // jpg, png, gif
+
+                        if (!in_array($type, ['jpg', 'jpeg', 'gif', 'png', 'svg'])) {
+                            continue; // Skip invalid types
+                        }
+
+                        $data = base64_decode($data);
+
+                        if ($data === false) {
+                            continue; // Skip invalid base64
+                        }
+
+                        $filename = \Illuminate\Support\Str::random(40) . '.' . $type;
+                        $path = 'problems/' . $filename;
+                        \Illuminate\Support\Facades\Storage::disk('public')->put($path, $data);
+                    }
+                }
+                // Case 2: Multipart File (UploadedFile)
+                elseif ($photo instanceof \Illuminate\Http\UploadedFile) {
+                    if ($photo->isValid()) {
+                        $path = $photo->store('problems', 'public');
+                    }
+                }
+
+                // If a path was generated (upload successful), save to DB
+                if ($path) {
+                    $problem->photos()->create([
+                        'archive' => $path,
+                    ]);
+                }
             }
         }
 
