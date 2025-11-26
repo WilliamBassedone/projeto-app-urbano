@@ -1,4 +1,5 @@
 {
     "Groups": true,
-    "Authentication": true
+    "Authentication": true,
+    "Problems": true
 }
