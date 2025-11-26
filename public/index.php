@@ -5,11 +5,6 @@ use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
 
-if (isset($_GET['debug_die'])) {
-    header('Content-Type: application/json');
-    die(json_encode(['status' => 'Hit index.php', 'method' => $_SERVER['REQUEST_METHOD']]));
-}
-
 // Determine if the application is in maintenance mode...
 if (file_exists($maintenance = __DIR__ . '/../storage/framework/maintenance.php')) {
     require $maintenance;
