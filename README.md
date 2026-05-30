@@ -1,22 +1,21 @@
-# Aplicação de Problemas Urbanos
+# API de Problemas Urbanos
 
-Uma plataforma web para registro, gerenciamento e acompanhamento de problemas urbanos. Permite que usuários autenticados cadastrem, visualizem e agrupem problemas relacionados a infraestrutura urbana, facilitando a organização e resolução de questões comunitárias.
+Uma API REST desenvolvida em Laravel para gerenciamento de problemas urbanos. Fornece endpoints para autenticação, registro e acompanhamento de problemas relacionados a infraestrutura urbana, bem como agrupamento e categorização de questões comunitárias. Projetada para ser consumida por aplicações cliente, como aplicativos móveis desenvolvidos em Java.
 
 ## Tecnologias
 
 [![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=flat-square&logo=laravel&logoColor=white)](https://laravel.com)
 [![PHP](https://img.shields.io/badge/PHP-777BB4?style=flat-square&logo=php&logoColor=white)](https://php.net)
-[![Blade](https://img.shields.io/badge/Blade-FF2D20?style=flat-square&logo=laravel&logoColor=white)](https://laravel.com/docs/blade)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-06B6D4?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
-[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white)](https://www.mysql.com)
+[![REST API](https://img.shields.io/badge/REST%20API-005C9C?style=flat-square&logo=api&logoColor=white)](https://restfulapi.net)
 
 ## Como Funciona
 
-O projeto utiliza a arquitetura modular do Laravel para organizar funcionalidades em componentes independentes. A aplicação é dividida em três módulos principais: um sistema de autenticação que garante acesso seguro à plataforma, um módulo de gerenciamento de grupos para organizar problemas de forma temática ou geográfica, e um módulo de problemas que implementa operações CRUD completas para criar e gerenciar registros de questões urbanas.
+A API utiliza a arquitetura modular do Laravel para organizar funcionalidades em componentes independentes. O projeto é dividido em três módulos principais: um sistema de autenticação que controla o acesso seguro aos endpoints protegidos, um módulo de gerenciamento de grupos para organizar e categorizar problemas, e um módulo de problemas que implementa operações CRUD completas para criar, ler, atualizar e deletar registros de questões urbanas.
 
-A autenticação é obrigatória para acessar o sistema. Uma vez autenticado, o usuário pode acessar rotas protegidas que permitem listar, criar, editar e deletar problemas urbanos através de um controlador dedicado. O sistema utiliza migrações de banco de dados para gerenciar a estrutura das tabelas e garante a integridade dos dados com relacionamentos adequados entre entidades.
+A autenticação é baseada em tokens e é obrigatória para acessar recursos protegidos. Uma vez autenticado, o cliente pode fazer requisições para listar todos os problemas, criar novos registros, atualizar informações existentes e deletar questões resolvidas. O sistema utiliza migrações de banco de dados para gerenciar a estrutura das tabelas e garante a integridade dos dados através de relacionamentos e validações adequadas.
 
-O frontend é construído com Blade templates renderizados pelo servidor, combinado com Tailwind CSS para estilização responsiva. A interface permite interações dinâmicas através de JavaScript, oferecendo uma experiência fluida ao usuário ao navegar, criar e editar problemas urbanos.
+Todos os endpoints retornam respostas em formato JSON, permitindo fácil integração com aplicações cliente desenvolvidas em qualquer linguagem de programação. A API segue os princípios RESTful e implementa autenticação segura, validação de dados e tratamento robusto de erros.
 
 ## Estrutura
 
@@ -24,48 +23,42 @@ O frontend é construído com Blade templates renderizados pelo servidor, combin
 projeto-app-urbano/
 ├── Modules/
 │   ├── Authentication/          # Módulo de autenticação
-│   │   ├── app/
+│   │   ├── app/Http/Controllers/
+│   │   ├── app/Models/
 │   │   ├── config/
-│   │   ├── resources/
 │   │   ├── routes/
-│   │   └── ...
+│   │   └── tests/
 │   ├── Groups/                  # Módulo de agrupamento
-│   │   ├── app/
+│   │   ├── app/Http/Controllers/
+│   │   ├── app/Models/
 │   │   ├── config/
-│   │   ├── resources/
 │   │   ├── routes/
-│   │   └── ...
-│   └── Problems/                # Módulo de gerenciamento de problemas
+│   │   └── tests/
+│   └── Problems/                # Módulo de problemas
 │       ├── app/Http/Controllers/
 │       ├── app/Models/
 │       ├── config/
 │       ├── database/migrations/
-│       ├── resources/views/
 │       ├── routes/web.php
 │       └── tests/
 ├── app/                         # Núcleo da aplicação
 │   ├── Http/Controllers/
+│   ├── Http/Middleware/
 │   ├── Models/
 │   ├── Providers/
 │   └── Support/
 ├── bootstrap/                   # Inicialização da aplicação
 ├── config/                      # Arquivos de configuração
-├── database/                    # Seeders e factories
-├── public/                      # Arquivos públicos (index.php, CSS, JS)
-├── resources/                   # Assets e views
-│   ├── css/
-│   ├── js/
-│   └── views/
-├── routes/                      # Definição de rotas
+├── database/                    # Seeders, factories e migrações
+├── routes/                      # Definição de rotas da API
 ├── storage/                     # Arquivos de cache e logs
-├── tests/                       # Testes da aplicação
+├── tests/                       # Testes automatizados
 ├── .env.example                 # Configurações de exemplo
 ├── composer.json                # Dependências PHP
-├── package.json                 # Dependências JavaScript
 └── README.md                    # Este arquivo
 ```
 
-## Como Visualizar
+## Como Executar
 
 Clone o repositório e configure o projeto em seu ambiente local.
 
@@ -80,12 +73,6 @@ Instale as dependências PHP com Composer:
 composer install
 ```
 
-Instale as dependências JavaScript com npm:
-
-```bash
-npm install
-```
-
 Copie o arquivo de configuração de exemplo e gere uma chave de aplicação:
 
 ```bash
@@ -93,7 +80,7 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-Configure o banco de dados no arquivo `.env` e execute as migrações:
+Configure o banco de dados no arquivo `.env` com suas credenciais MySQL e execute as migrações:
 
 ```bash
 php artisan migrate
@@ -105,4 +92,4 @@ Inicie o servidor de desenvolvimento:
 php artisan serve
 ```
 
-Acesse a aplicação em seu navegador através de `http://localhost:8000`. A página de boas-vindas será carregada, de onde você pode navegar para as funcionalidades de autenticação e gerenciamento de problemas urbanos.
+A API estará disponível em `http://localhost:8000`. Você pode testar os endpoints usando ferramentas como Postman, Insomnia ou curl. Consulte a documentação dos módulos individuais para conhecer os endpoints disponíveis e como utilizá-los em sua aplicação cliente.
